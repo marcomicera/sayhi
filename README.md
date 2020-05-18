@@ -2,11 +2,13 @@
 
 ## Run locally
 ```
-make run
+PORT=12345
+make run [PORT=$PORT]
 ```
 
 ## Run in container
 ```
 make image
-docker run --rm -p 8080:8080 marcomicera/sayhi
+PORT=12345
+docker run --rm -p $PORT:8080 marcomicera/cyclapp
 ```

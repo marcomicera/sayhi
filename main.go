@@ -10,6 +10,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -28,5 +30,7 @@ func main() {
 
 	router := sw.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	port := flag.Int("port", 8080, "Web service port")
+	flag.Parse()
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), router))
 }

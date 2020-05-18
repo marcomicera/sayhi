@@ -6,6 +6,7 @@ GOGET=$(GOCMD) get
 GOLINTERS=golangci-lint
 DEVELOPER=marcomicera
 BINARY_NAME=sayhi
+PORT=8080
 
 all: linters test build
 linters:
@@ -17,7 +18,7 @@ build: deps
 test:
 		$(GOTEST) -v ./...
 run: build
-		./$(BINARY_NAME)
+		./$(BINARY_NAME) -port=$(PORT)
 clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
