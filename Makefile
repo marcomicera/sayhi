@@ -3,9 +3,12 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
+GOLINTERS=golangci-lint
 BINARY_NAME=sayhi
 
-all: test build
+all: linters test build
+linters:
+		$(GOLINTERS) run -v ./...
 deps:
 		$(GOGET) -d -v ./...
 build: deps
