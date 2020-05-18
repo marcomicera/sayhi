@@ -10,7 +10,9 @@
 package sayhi
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 )
 
 func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
@@ -20,5 +22,15 @@ func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
 
 func SayHi(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
+	// Getting the right person's name
+	person := "Stranger"
+	if name, ok := r.URL.Query()["name"]; ok {
+		person = SplitCamelCase(strings.Join(name, " "))
+	}
+
+	_, err := fmt.Fprintf(w, "Hello %s", person)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }
