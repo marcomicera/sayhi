@@ -4,6 +4,7 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOLINTERS=golangci-lint
+DEVELOPER=marcomicera
 BINARY_NAME=sayhi
 
 all: linters test build
@@ -20,3 +21,5 @@ run: build
 clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
+image:
+		docker build -t $(DEVELOPER)/$(BINARY_NAME) .
