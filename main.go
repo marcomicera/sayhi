@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	// WARNING!
 	// Change this to a fully-qualified import path
@@ -25,7 +26,20 @@ import (
 	sw "./go"
 )
 
+type logWriter struct {
+}
+
+// Custom log format includes ISO date
+func (writer logWriter) Write(bytes []byte) (int, error) {
+	return fmt.Print(time.Now().Format(time.RFC3339) + " " + string(bytes))
+}
+
 func main() {
+
+	// Using custom log format
+	log.SetFlags(0)
+	log.SetOutput(new(logWriter))
+
 	log.Printf("Server started")
 
 	router := sw.NewRouter()

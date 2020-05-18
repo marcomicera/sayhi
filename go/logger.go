@@ -12,21 +12,27 @@ package sayhi
 import (
 	"log"
 	"net/http"
-	"time"
 )
+
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func NewLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
+	return &loggingResponseWriter{w, http.StatusOK}
+}
 
 func Logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-
-		inner.ServeHTTP(w, r)
+		lrw := NewLoggingResponseWriter(w)
+		inner.ServeHTTP(lrw, r)
 
 		log.Printf(
-			"%s %s %s %s",
+			"Request: %s %s, HTTP status: %d",
 			r.Method,
 			r.RequestURI,
-			name,
-			time.Since(start),
+			lrw.statusCode,
 		)
 	})
 }
