@@ -1,14 +1,16 @@
 # `sayhi`: a simple Golang HTTP service
 
-## Run locally
+First, define the web service port (defaults to `8080`):
 ```
 PORT=12345
+```
+
+## Run locally
+```
 make run [PORT=$PORT]
 ```
 
 ## Run in container
 ```
-make image
-PORT=12345
-docker run --rm -p $PORT:8080 marcomicera/cyclapp
+make run-image [PORT=$PORT] 
 ```

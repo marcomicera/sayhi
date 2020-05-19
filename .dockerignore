@@ -1,4 +1,5 @@
 *
-!api
 !go
+!go.mod
+!go.sum
 !*.go

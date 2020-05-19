@@ -22,5 +22,13 @@ run: build
 clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
-image:
+
+# Docker targets
+build-image: build
 		docker build -t $(DEVELOPER)/$(BINARY_NAME) .
+run-image: build-image
+		docker run \
+		--name=$(BINARY_NAME) \
+		--rm \
+		-p $(PORT):8080 \
+		$(DEVELOPER)/$(BINARY_NAME)

@@ -11,6 +11,7 @@ package sayhi
 
 import (
 	"fmt"
+	"github.com/marcomicera/sayhi/go/stringutils"
 	"net/http"
 	"strings"
 )
@@ -21,14 +22,15 @@ func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func SayHi(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	// Getting the right person's name
 	person := "Stranger"
 	if name, ok := r.URL.Query()["name"]; ok {
-		person = SplitCamelCase(strings.Join(name, " "))
+		person = stringutils.SplitCamelCase(strings.Join(name, " "))
 	}
 
+	// Building response message
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	_, err := fmt.Fprintf(w, "Hello %s", person)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

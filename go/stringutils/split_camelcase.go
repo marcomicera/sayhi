@@ -1,4 +1,4 @@
-package sayhi
+package stringutils
 
 import (
 	"regexp"
