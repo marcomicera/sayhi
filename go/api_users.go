@@ -14,11 +14,17 @@ import (
 	"fmt"
 	"github.com/marcomicera/sayhi/go/stringutils"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
 var GitCommit string
 var ProjectName string
+
+// Errors
+var InvalidPersonNameErrorMessage = "Person name is invalid"
+var SalutationInternalServerErrorErrorMessage = "The server tried to say hi, but an error occurred. Please do not take it personally."
+var ProjectInfoInternalServerErrorErrorMessage = "An error occurred while retrieving this project's info"
 
 func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
 
@@ -31,12 +37,14 @@ func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
 	js, err := json.Marshal(info)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(ProjectInfoInternalServerErrorErrorMessage))
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	_, err = w.Write(js)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(ProjectInfoInternalServerErrorErrorMessage))
 	}
 }
 
@@ -44,8 +52,17 @@ func SayHi(w http.ResponseWriter, r *http.Request) {
 
 	// Getting the right person's name
 	person := "Stranger"
-	if name, ok := r.URL.Query()["name"]; ok {
-		person = stringutils.SplitCamelCase(strings.Join(name, " "))
+	if name, ok := r.URL.Query()["name"]; ok && strings.Join(name, " ") != "" {
+		person = strings.Join(name, " ")
+
+		r, _ := regexp.Compile("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")
+		if !r.MatchString(person) {
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(InvalidPersonNameErrorMessage))
+			return
+		}
+
+		person = stringutils.SplitCamelCase(person)
 	}
 
 	// Building response message
@@ -53,5 +70,6 @@ func SayHi(w http.ResponseWriter, r *http.Request) {
 	_, err := fmt.Fprintf(w, "Hello %s", person)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(SalutationInternalServerErrorErrorMessage))
 	}
 }
