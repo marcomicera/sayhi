@@ -10,15 +10,34 @@
 package sayhi
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/marcomicera/sayhi/go/stringutils"
 	"net/http"
 	"strings"
 )
 
+var GitCommit string
+var ProjectName string
+
 func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
+
+	// Retrieving project information
+	var info ProjectInfo
+	info.GitHash = GitCommit
+	info.ProjectName = ProjectName
+
+	// Building response message
+	js, err := json.Marshal(info)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(js)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }
 
 func SayHi(w http.ResponseWriter, r *http.Request) {

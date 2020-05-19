@@ -1,12 +1,17 @@
+# Go commands
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOLINTERS=golangci-lint
+
+# Project information
+DEFAULT_PORT=8080
 DEVELOPER=marcomicera
 BINARY_NAME=sayhi
-PORT=8080
+GIT_COMMIT := $(shell git rev-list -1 HEAD)
+PROJECT_NAME := $(shell basename `git rev-parse --show-toplevel`)
 
 all: linters test build
 linters:
@@ -14,21 +19,23 @@ linters:
 deps:
 		$(GOGET) -d -v ./...
 build: deps
-		$(GOBUILD) -v -o $(BINARY_NAME)
+		$(GOBUILD) -v -ldflags "-X github.com/marcomicera/sayhi/go.GitCommit=$(GIT_COMMIT) \
+		-X github.com/marcomicera/sayhi/go.ProjectName=$(PROJECT_NAME)" -o $(BINARY_NAME)
 test:
 		$(GOTEST) -v ./...
 run: build
-		./$(BINARY_NAME) -port=$(PORT)
+		./$(BINARY_NAME) -port=$(DEFAULT_PORT)
 clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
-
-# Docker targets
-build-image: build
-		docker build -t $(DEVELOPER)/$(BINARY_NAME) .
+build-image:
+		docker build \
+		--build-arg GIT_COMMIT=$(GIT_COMMIT) \
+		--build-arg PROJECT_NAME=$(PROJECT_NAME) \
+		-t $(DEVELOPER)/$(BINARY_NAME) .
 run-image: build-image
 		docker run \
 		--name=$(BINARY_NAME) \
 		--rm \
-		-p $(PORT):8080 \
+		-p $(DEFAULT_PORT):8080 \
 		$(DEVELOPER)/$(BINARY_NAME)
