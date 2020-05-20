@@ -91,7 +91,7 @@ components:
       description: 'The git project SHA-1 hash'
       type: string
       minLength: 5
-      pattern: "\b[0-9a-f]{5,40}\b"
+      pattern: "^[0-9a-f]{5,40}$"
       example: 418c1f073782a1c855890971ff18794f7a298f6d
     ProjectName:
       description: Name of this project
