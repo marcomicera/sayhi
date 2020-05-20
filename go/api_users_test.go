@@ -56,7 +56,7 @@ func TestGetProjectInfo(t *testing.T) {
 	}
 
 	// Checking the project name
-	projectNameRegex, _ := regexp.Compile("^[a-zA-Z0-9_.-]+$")
+	projectNameRegex, _ := regexp.Compile("^[a-zA-Z0-9_.-/]+$")
 	if !projectNameRegex.MatchString(info.ProjectName) {
 		t.Errorf("Invalid project name: %v", info.ProjectName)
 	}
