@@ -1,3 +1,9 @@
+issues:
+  exclude:
+    # False positive for table tests
+    # https://github.com/kyoh86/scopelint/issues/4
+    - Using the variable on range scope .* in function literal
+
 linters:
   enable:
     - megacheck

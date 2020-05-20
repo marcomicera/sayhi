@@ -12,17 +12,22 @@ DEVELOPER=marcomicera
 BINARY_NAME=sayhi
 GIT_COMMIT := $(shell git rev-list -1 HEAD)
 PROJECT_NAME := $(shell basename `git rev-parse --show-toplevel`)
+FULLY_QUALIFIED_NAME=github.com/$(DEVELOPER)/$(BINARY_NAME)
 
-all: linters test build
+# Build-time variables
+define BUILD_TIME_VARS
+-ldflags "-X $(FULLY_QUALIFIED_NAME)/go.GitCommit=$(GIT_COMMIT) -X $(FULLY_QUALIFIED_NAME)/go.ProjectName=$(PROJECT_NAME)"
+endef
+
+all: linters build
 linters:
 		$(GOLINTERS) run -v ./...
 deps:
 		$(GOGET) -d -v ./...
-build: deps
-		$(GOBUILD) -v -ldflags "-X github.com/marcomicera/sayhi/go.GitCommit=$(GIT_COMMIT) \
-		-X github.com/marcomicera/sayhi/go.ProjectName=$(PROJECT_NAME)" -o $(BINARY_NAME)
+build: deps test
+		$(GOBUILD) -v $(BUILD_TIME_VARS) -o $(BINARY_NAME)
 test:
-		$(GOTEST) -v ./...
+		$(GOTEST) -v $(BUILD_TIME_VARS) ./...
 run: build
 		./$(BINARY_NAME) -port=$(DEFAULT_PORT)
 clean:

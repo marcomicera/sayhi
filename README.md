@@ -14,3 +14,8 @@ make run [PORT=$PORT]
 ```
 make run-image [PORT=$PORT] 
 ```
+
+## Run tests
+```
+make test 
+```
