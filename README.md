@@ -2,19 +2,19 @@
 
 ### Getting started
 
-First, you can optionally se the web service port (defaults to `8080`):
+First, you can optionally set the web service port (defaults to `8080`):
 ```bash
-PORT=12345
+$ PORT=12345
 ```
 
 You can launch the web service
 - locally:
-    ```bash
-    make run [PORT=$PORT]
+    ```
+    $ make run [PORT=$PORT]
     ```
 - in a container:
-    ```bash
-    make run-image [PORT=$PORT] 
+    ```
+    $ make run-image [PORT=$PORT] 
     ```
 
 Look at the web service saying hi!
@@ -25,11 +25,14 @@ Hello Alfred E Neumann
 
 ### Run tests
 ```
-make test 
+$ make test 
 ```
 
-##### Override environment variables
+### Override environment variables
 Simply edit [`config.env`](config.env) like so:
 ```dotenv
 TEST_ENV_VAR=a non-significant value
 ```
+
+### Contribute
+Take a look at the [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
