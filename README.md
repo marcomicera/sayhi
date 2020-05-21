@@ -1,14 +1,27 @@
 # `sayhi`: a simple Golang HTTP service
 
-### Run the web service
-- Locally:
+### Getting started
+
+First, you can optionally se the web service port (defaults to `8080`):
+```bash
+PORT=12345
+```
+
+You can launch the web service
+- locally:
     ```bash
-    make run [PORT=12345]
+    make run [PORT=$PORT]
     ```
-- In a container:
+- in a container:
     ```bash
-    make run-image [PORT=12345] 
+    make run-image [PORT=$PORT] 
     ```
+
+Look at the web service saying hi!
+```
+$ curl localhost:${PORT}/helloworld?name=AlfredENeumann
+Hello Alfred E Neumann
+```
 
 ### Run tests
 ```
