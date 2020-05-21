@@ -7,7 +7,7 @@ GOGET=$(GOCMD) get
 GOLINTERS=golangci-lint
 
 # Project information
-DEFAULT_PORT=8080
+PORT=8080
 DEVELOPER=marcomicera
 BINARY_NAME=sayhi
 GIT_COMMIT := $(shell git rev-list -1 HEAD)
@@ -29,7 +29,7 @@ build: deps test
 test:
 		$(GOTEST) -v $(BUILD_TIME_VARS) ./...
 run: build
-		./$(BINARY_NAME) -port=$(DEFAULT_PORT)
+		./$(BINARY_NAME) -port=$(PORT)
 clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
@@ -42,5 +42,5 @@ run-image: build-image
 		docker run \
 		--name=$(BINARY_NAME) \
 		--rm \
-		-p $(DEFAULT_PORT):8080 \
+		-p $(PORT):8080 \
 		$(DEVELOPER)/$(BINARY_NAME)
