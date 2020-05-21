@@ -1,3 +1,8 @@
+# Including env file
+cnf ?= config.env
+include $(cnf)
+export $(shell sed 's/=.*//' $(cnf))
+
 # Go commands
 GOCMD=go
 GOBUILD=$(GOCMD) build
@@ -42,5 +47,6 @@ run-image: build-image
 		docker run \
 		--name=$(BINARY_NAME) \
 		--rm \
+		--env-file=./config.env \
 		-p $(PORT):8080 \
 		$(DEVELOPER)/$(BINARY_NAME)

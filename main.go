@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	sw "github.com/marcomicera/sayhi/go"
@@ -34,6 +35,8 @@ func main() {
 	log.SetOutput(new(logWriter))
 
 	log.Printf("Server started")
+	fmt.Printf("You can override env. variables by editing the \"config.env\" file.\n"+
+		"If you defined \"TEST_ENV_VAR\", you will see its value here: %s\n", os.Getenv("TEST_ENV_VAR"))
 
 	router := sw.NewRouter()
 
