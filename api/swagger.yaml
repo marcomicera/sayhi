@@ -87,6 +87,8 @@ components:
           $ref: '#/components/schemas/GitHash'
         projectName:
           $ref: '#/components/schemas/ProjectName'
+        queryTime:
+          $ref: '#/components/schemas/QueryTime'
     GitHash:
       description: 'The git project SHA-1 hash'
       type: string
@@ -99,6 +101,11 @@ components:
       minLength: 1
       pattern: "^[a-zA-Z0-9_.-/]+$"
       example: 'sayhi'
+    QueryTime:
+      description: current time
+      type: string
+      format: date-time
+      example: '2020-05-21T17:32:12.731494826+02:00'
   parameters:
     PersonNameParameter:
       name: name

@@ -9,9 +9,15 @@
  */
 package sayhi
 
+import (
+	"time"
+)
+
 // Project information, including the git hash and the name of the project
 type ProjectInfo struct {
 	GitHash string `json:"gitHash"`
 
 	ProjectName string `json:"projectName"`
+
+	QueryTime *time.Time `json:"queryTime,omitempty"`
 }

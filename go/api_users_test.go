@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"regexp"
 	"testing"
+	"time"
 )
 
 // Checks project info by using RegEx
@@ -50,6 +51,21 @@ func TestGetProjectInfo(t *testing.T) {
 	projectNameRegex, _ := regexp.Compile("^[a-zA-Z0-9_.-/]+$")
 	if !projectNameRegex.MatchString(info.ProjectName) {
 		t.Errorf("Invalid project name: %v", info.ProjectName)
+	}
+
+	// Checking the query time
+	// Regex: https://www.debuggex.com/r/N4Jk-0WQtcTHFHkM
+	timeDateRegex, _ := regexp.Compile("^(?:[1-9]\\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|" +
+		"(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\\d(?:0[48]|[2468][048]|[13579][26])|" +
+		"(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d.[0-9]{9}(?:Z|[+-][01]\\d:" +
+		"[0-5]\\d)$")
+	if info.QueryTime != nil {
+		queryTime := *info.QueryTime
+		queryTimeString := queryTime.Format(time.RFC3339Nano)
+		t.Logf("Query time is: %s", queryTimeString)
+		if !timeDateRegex.MatchString(queryTimeString) {
+			t.Errorf("Invalid query time: %s", queryTime)
+		}
 	}
 }
 

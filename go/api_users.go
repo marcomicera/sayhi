@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 )
 
 var GitCommit string
@@ -32,6 +33,8 @@ func GetProjectInfo(w http.ResponseWriter, r *http.Request) {
 	var info ProjectInfo
 	info.GitHash = GitCommit
 	info.ProjectName = ProjectName
+	currentTime := time.Now()
+	info.QueryTime = &currentTime
 
 	// Building response message
 	js, err := json.Marshal(info)
