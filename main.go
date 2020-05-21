@@ -22,6 +22,8 @@ import (
 	sw "github.com/marcomicera/sayhi/go"
 )
 
+var timeout = 30 * time.Second
+
 type logWriter struct {
 }
 
@@ -40,8 +42,9 @@ func serve(ctx context.Context, port int) (err error) {
 	// Starting the web server
 	router := sw.NewRouter()
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
-		Handler: router,
+		Addr: fmt.Sprintf(":%d", port),
+		Handler: http.TimeoutHandler(router, timeout,
+			fmt.Sprintf("timeout (took longer than %d seconds)!\n", timeout/time.Second)),
 	}
 	go func() {
 		log.Fatal(server.ListenAndServe())
