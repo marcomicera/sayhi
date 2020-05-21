@@ -3,7 +3,6 @@ package sayhi
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -22,19 +21,11 @@ func TestGetProjectInfo(t *testing.T) {
 	rec := httptest.NewRecorder()
 	GetProjectInfo(rec, req)
 
-	// FIXME Delete expected result
-	var expected ProjectInfo
-	expected.GitHash = "21ab124f9be5b67afb24dbc7f9ef549229886fd5"
-	expected.ProjectName = "sayhi"
-	expectedBytes, _ := json.Marshal(expected)
-	fmt.Printf("expected %d bytes\n", len(expectedBytes))
-
 	// Retrieving result
 	res := rec.Result()
 	defer res.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(res.Body)
-	fmt.Printf("got %d bytes\n", len(bodyBytes)) // FIXME delete
-	fmt.Printf("body converted to string: %s\n", string(bytes.TrimSpace(bodyBytes)))
+	t.Logf("Body converted to string: %s\n", string(bytes.TrimSpace(bodyBytes)))
 	if err != nil {
 		t.Fatalf("Could not read response: %v", err)
 	}
