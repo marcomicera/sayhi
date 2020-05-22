@@ -65,7 +65,13 @@ func SayHi(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		person = stringutils.SplitCamelCase(person)
+		var err error
+		person, err = stringutils.SplitCamelCasePersonName(person)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(InvalidPersonNameErrorMessage))
+			return
+		}
 	}
 
 	// Building response message

@@ -17,8 +17,15 @@ func RemoveWhitespaces(str string) string {
 }
 
 func Fuzz(data []byte) int {
+
 	name := string(data)
-	splitCamelCase := su.SplitCamelCase(name)
+	splitCamelCase, err := su.SplitCamelCasePersonName(name)
+
+	// Ignoring names with invalid characters
+	if err != nil {
+		return -1
+	}
+
 	revertedNameWithoutSpaces := RemoveWhitespaces(splitCamelCase)
 	if name != revertedNameWithoutSpaces {
 		panic(fmt.Sprintf("Expected %q, got %q", name, revertedNameWithoutSpaces))
