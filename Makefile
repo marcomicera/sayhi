@@ -7,6 +7,8 @@ export $(shell sed 's/=.*//' $(cnf))
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
+GOFUZZBUILD=go-fuzz-build
+GOFUZZ=go-fuzz
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOLINTERS=golangci-lint
@@ -31,6 +33,9 @@ deps:
 		$(GOGET) -d -v ./...
 build: deps test
 		$(GOBUILD) -v $(BUILD_TIME_VARS) -o $(BINARY_NAME)
+fuzz:
+		echo "Press CTRL+C to stop go-fuzz..."
+		cd go/fuzz && GO111MODULE=off $(GOFUZZBUILD) && GO111MODULE=off $(GOFUZZ) && cd ../..
 test:
 		$(GOTEST) -v $(BUILD_TIME_VARS) ./...
 run: build

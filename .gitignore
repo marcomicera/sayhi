@@ -1,6 +1,10 @@
 # Binary
 /sayhi
 
+# Fuzz directories
+go/fuzz/*
+!go/fuzz/fuzz.go
+
 # Created by https://www.gitignore.io/api/go,jetbrains
 # Edit at https://www.gitignore.io/?templates=go,jetbrains
 
