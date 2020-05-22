@@ -37,7 +37,7 @@ fuzz:
 		echo "Press CTRL+C to stop go-fuzz..."
 		cd go/fuzz && GO111MODULE=off $(GOFUZZBUILD) && GO111MODULE=off $(GOFUZZ) && cd ../..
 test:
-		$(GOTEST) -v $(BUILD_TIME_VARS) ./...
+		$(GOTEST) $(BUILD_TIME_VARS) ./...
 run: build
 		./$(BINARY_NAME) -port=$(PORT)
 clean:
